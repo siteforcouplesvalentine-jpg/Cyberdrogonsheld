@@ -30,7 +30,23 @@ function scanUrl() {
     if (tunnels.some(t => host.includes(t))) {
         riskScore += 90;
         detections.push("Hacker Tunnel/Localhost 🚩");
-    }
+    } 
+    // 1. Suspicious Extensions (Cheap domains often used by hackers)
+const riskyExtensions = ['.sbs', '.xyz', '.top', '.buzz', '.tk', '.ml'];
+
+if (riskyExtensions.some(ext => host.endsWith(ext))) {
+    riskScore += 70;
+    detections.push("Suspicious Domain Extension (High Risk) 🚩");
+}
+
+// 2. Suspicious URL Patterns (Common in image/file phishing)
+const riskyPatterns = ['ref=', 'sharing', 'index.php?', 'login', 'verify'];
+
+if (riskyPatterns.some(pattern => linkInput.toLowerCase().includes(pattern))) {
+    riskScore += 30;
+    detections.push("Suspicious Link Pattern Detected 🔍");
+}
+
 
     // 2. Phishing Logic for Brands
     const brands = ['amazon', 'flipkart', 'meesho', 'myntra', 'iphone'];
